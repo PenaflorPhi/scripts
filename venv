@@ -1,4 +1,31 @@
-python -m venv .env
-source .env/bin/activate
-git init --initial-branch=main
-curl https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore > .gitignore
+#!/bin/sh
+
+handle_error() {
+    echo "Error: $1"
+    exit 1
+}
+
+echo "Setting up python virtual environment"
+if [ -d ".env" ]; then
+    echo "Virtual environment already exists."
+else
+    python -m venv .env || handle_error "Failed to create virtual environment"
+fi
+
+echo "Activating python virtual environment"
+source .env/bin/activate || handle_error "Failed to activate virtual environment"
+
+echo "Initiating git repository"
+if [ -d ".git" ]; then
+    echo "Git repository already initialized."
+else
+    git init --initial-branch=main || handle_error "Failed to initialize git repository"
+fi
+
+if [ ! -f ".gitignore" ]; then
+    curl -s https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore > .gitignore || handle_error "Failed to download .gitignore"
+else
+    echo ".gitignore already exists."
+fi
+
+echo "Setup complete!"
