@@ -1,0 +1,4 @@
+python -m venv .env
+source .env/bin/activate
+git init --initial-branch=main
+curl https://raw.githubusercontent.com/github/gitignore/main/Python.gitignore > .gitignore
